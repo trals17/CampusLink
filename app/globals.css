@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn {
+  @apply w-full bg-black h-10 text-white rounded-sexy-name mt-tomato;
+}
+
+@layer base {
+  a {
+    @apply text-red-500;
+  }
+}
+
+@layer utilities {
+  .text-bigger-hello {
+    @apply font-semibold;
+  }
+}
+
+@layer components {
+  .primary-btn {
+    @apply w-full bg-red-500 text-white font-medium rounded-md text-center
+    hover:bg-red-400 transition-colors;
+  }
+}
