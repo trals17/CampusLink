@@ -76,12 +76,12 @@ export default function Live() {
             <p className="text-9xl text-white animate-bounce">
               <Image
                 src="/cow_beanie_crossbow.png"
-                alt="덤벨"
+                alt="cow_beanie_crossbow"
                 width={120}
                 height={120}
               />
             </p>
-            <p className="text-sm font-semibold">(앞사람이 덤벨 사용 중.. )</p>
+            <p className="text-sm font-semibold">(로딩 중.. )</p>
           </div>
         ) : filteredStreams.length > 0 ? (
           filteredStreams.map((stream) => (
