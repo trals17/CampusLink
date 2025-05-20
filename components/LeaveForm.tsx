@@ -38,7 +38,7 @@ export default function LeaveForm({ user, id }: ILeaveFormProps) {
         <div className="flex flex-col gap-4 pt-8">
           <div className="flex flex-row justify-center items-center">
             <Image
-              src={"/속상한감자.png"}
+              src={"/cow_angry_fist.png"}
               alt="운동감자"
               width={100}
               height={100}

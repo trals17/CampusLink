@@ -34,7 +34,7 @@ const getCachedPosts = nextCache(getPosts, ["posts-list"], {
 });
 
 export const metadata = {
-  title: "운동감자",
+  title: "CampusLink",
 };
 
 export default async function Life() {
@@ -47,7 +47,12 @@ export default async function Life() {
     <div className="p-5 flex flex-col mb-24">
       <div className="border-b border-neutral-600 pb-5">
         <h1 className="text-center text-3xl flex flex-row justify-center items-center">
-          <Image src="/설렘감자.png" alt="설렘감자" width={60} height={60} />
+          <Image
+            src="/cow_jump_kick.png"
+            alt="설렘감자"
+            width={60}
+            height={60}
+          />
           <strong className="text-yellow-600">와우</strong>의 이야기
         </h1>
       </div>

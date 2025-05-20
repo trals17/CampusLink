@@ -57,7 +57,7 @@ export default async function Profile() {
     <div className="p-5 flex flex-col gap-8">
       <div className="flex flex-row items-center gap-2">
         <Image
-          src="/기본감자.png"
+          src="/cow_pen_tool.png"
           alt="운동감자"
           width={80}
           height={80}

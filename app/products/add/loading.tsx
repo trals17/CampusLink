@@ -4,7 +4,7 @@ export default function Loading() {
   return (
     <div className="fixed top-0 left-0 w-full h-full flex flex-col justify-center items-center bg-black z-50">
       <Image
-        src="/health2.png"
+        src="/cow_beanie_crossbow.png"
         alt="덤벨"
         width={300}
         height={300}
@@ -14,7 +14,7 @@ export default function Loading() {
         className="text-center
       font-semibold text-lg"
       >
-        티동 재건축 중 ...
+        로딩 중 ...
       </h1>
     </div>
   );

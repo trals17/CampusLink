@@ -1,9 +1,9 @@
-import getSession from '@/lib/session';
-import { formatToTime } from '@/lib/utils';
-import { UserCircleIcon } from '@heroicons/react/24/solid';
-import Image from 'next/image';
-import Link from 'next/link';
-import { getChatRoom } from './actions';
+import getSession from "@/lib/session";
+import { formatToTime } from "@/lib/utils";
+import { UserCircleIcon } from "@heroicons/react/24/solid";
+import Image from "next/image";
+import Link from "next/link";
+import { getChatRoom } from "./actions";
 
 export default async function Chat() {
   const chatRooms = await getChatRoom();
@@ -12,12 +12,22 @@ export default async function Chat() {
   return (
     <div className="p-5 flex flex-col gap-5 mb-24">
       <div className="flex flex-row justify-center items-center pb-5 gap-4 border-b border-neutral-600">
-        <Image src={'/health2.png'} alt="덤벨" width={45} height={45} />
+        <Image
+          src={"/cow_beanie_crossbow.png"}
+          alt="덤벨"
+          width={45}
+          height={45}
+        />
         <div className="text-center text-3xl font-semibold border-orange-600 flex flex-col">
           <strong className="text-yellow-600">덤벨을</strong>
           <h1> 흔들어주세요</h1>
         </div>
-        <Image src={'/health2.png'} alt="덤벨" width={45} height={45} />
+        <Image
+          src={"/cow_beanie_crossbow.png"}
+          alt="덤벨"
+          width={45}
+          height={45}
+        />
       </div>
       {chatRooms
         .filter((chatRoom) => chatRoom.messages.length > 0)
