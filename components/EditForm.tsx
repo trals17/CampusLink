@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import Input from './input';
-import Button from './button';
-import { useState } from 'react';
+import Image from "next/image";
+import Input from "./input";
+import Button from "./button";
+import { useState } from "react";
 
-import EditAction from '@/app/products/[id]/edit/actions';
-import { useFormState } from 'react-dom';
-import { getUploadUrl } from '@/app/products/add/actions';
+import EditAction from "@/app/products/[id]/edit/actions";
+import { useFormState } from "react-dom";
+import { getUploadUrl } from "@/app/products/add/actions";
 
 interface IEditProps {
   product: {
@@ -21,8 +21,8 @@ interface IEditProps {
 
 export default function EditForm({ product }: IEditProps) {
   const [preview, setPreview] = useState<string | null>(null);
-  const [uploadUrl, setUploadUrl] = useState<string>('');
-  const [photoId, setPhotoId] = useState<string>('');
+  const [uploadUrl, setUploadUrl] = useState<string>("");
+  const [photoId, setPhotoId] = useState<string>("");
 
   const onImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -33,9 +33,9 @@ export default function EditForm({ product }: IEditProps) {
     }
     const file = files[0];
 
-    if (!file.type.startsWith('image/')) {
+    if (!file.type.startsWith("image/")) {
       return {
-        error: '이미지 파일만 업로드 가능합니다.',
+        error: "이미지 파일만 업로드 가능합니다.",
       };
     }
 
@@ -43,7 +43,7 @@ export default function EditForm({ product }: IEditProps) {
 
     if (fileSizeInMb > 2) {
       return {
-        error: '이미지의 크기가 2MB를 초과하는 이미지는 업로드 할 수 없습니다.',
+        error: "이미지의 크기가 2MB를 초과하는 이미지는 업로드 할 수 없습니다.",
       };
     }
 
@@ -61,21 +61,21 @@ export default function EditForm({ product }: IEditProps) {
   };
 
   const interceptAction = async (prevState: any, formData: FormData) => {
-    const file = formData.get('photo');
+    const file = formData.get("photo");
     if (file instanceof File) {
       // 파일 객체인지 확인
       const cloudflareForm = new FormData();
-      cloudflareForm.append('file', file);
+      cloudflareForm.append("file", file);
       const response = await fetch(uploadUrl, {
-        method: 'post',
+        method: "post",
         body: cloudflareForm,
       });
       console.log(await response.text());
       if (response.status !== 200) {
         return;
       }
-      const photoUrl = `https://imagedelivery.net/2YRH3jpkhrWOOYZOL3zGhA/${photoId}`;
-      formData.set('photo', photoUrl);
+      const photoUrl = `https://imagedelivery.net/5d0LqFK4H5JncIwtTJ4IZg/${photoId}`;
+      formData.set("photo", photoUrl);
     }
     return EditAction(prevState, formData);
   };

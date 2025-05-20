@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import EditProfileAction from '@/app/(tabs)/profile/edit/[id]/actions';
-import { getUploadUrl } from '@/app/products/add/actions';
-import Image from 'next/image';
-import { useState } from 'react';
-import { useFormState } from 'react-dom';
-import { XMarkIcon } from '@heroicons/react/24/solid';
-import Input from './input';
-import Link from 'next/link';
-import BeforePage from './BeforePage';
+import EditProfileAction from "@/app/(tabs)/profile/edit/[id]/actions";
+import { getUploadUrl } from "@/app/products/add/actions";
+import Image from "next/image";
+import { useState } from "react";
+import { useFormState } from "react-dom";
+import { XMarkIcon } from "@heroicons/react/24/solid";
+import Input from "./input";
+import Link from "next/link";
+import BeforePage from "./BeforePage";
 
 interface User {
   user: {
@@ -20,8 +20,8 @@ interface User {
 
 export default function EditProfile({ user }: User) {
   const [preview, setPreview] = useState<string | null>(null);
-  const [uploadUrl, setUploadUrl] = useState('');
-  const [profilePhotoId, setProfilePhotoId] = useState('');
+  const [uploadUrl, setUploadUrl] = useState("");
+  const [profilePhotoId, setProfilePhotoId] = useState("");
 
   const onImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -33,15 +33,15 @@ export default function EditProfile({ user }: User) {
 
     const file = files[0];
 
-    if (!file.type.startsWith('image/')) {
-      return alert('이미지 파일만 업로드가 가능합니다');
+    if (!file.type.startsWith("image/")) {
+      return alert("이미지 파일만 업로드가 가능합니다");
     }
 
     const fileSizeInMb = file.size / (1024 * 1024);
 
     if (fileSizeInMb > 2) {
       return alert(
-        '이미지의 크기가 2MB를 초과하는 이미지는 업로드 할 수 없습니다.'
+        "이미지의 크기가 2MB를 초과하는 이미지는 업로드 할 수 없습니다."
       );
     }
 
@@ -57,20 +57,20 @@ export default function EditProfile({ user }: User) {
   };
 
   const interceptAction = async (prevState: any, formData: FormData) => {
-    const file = formData.get('avatar');
+    const file = formData.get("avatar");
     if (file instanceof File) {
       const cloudflareForm = new FormData();
-      cloudflareForm.append('file', file);
+      cloudflareForm.append("file", file);
       const response = await fetch(uploadUrl, {
-        method: 'post',
+        method: "post",
         body: cloudflareForm,
       });
       if (response.status !== 200) {
         return;
       }
 
-      const photoUrl = `https://imagedelivery.net/2YRH3jpkhrWOOYZOL3zGhA/${profilePhotoId}`;
-      formData.set('avatar', photoUrl);
+      const photoUrl = `https://imagedelivery.net/5d0LqFK4H5JncIwtTJ4IZg/${profilePhotoId}`;
+      formData.set("avatar", photoUrl);
     }
 
     return EditProfileAction(prevState, formData);
@@ -94,9 +94,9 @@ export default function EditProfile({ user }: User) {
                 className="rounded-full"
                 style={{
                   backgroundImage: `url(${preview})`,
-                  backgroundSize: 'cover',
-                  width: '80px',
-                  height: '80px',
+                  backgroundSize: "cover",
+                  width: "80px",
+                  height: "80px",
                 }}
               />
             ) : (

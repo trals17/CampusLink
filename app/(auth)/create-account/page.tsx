@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import Button from '@/components/button';
-import Input from '@/components/input';
-import SocialLogin from '@/components/social-login';
-import { useFormState } from 'react-dom';
-import { createAccountAction } from './action';
-import { PASSWORD_MIN_LENGTH } from '@/lib/constants';
-import { getUploadUrl } from '@/app/products/add/actions';
-import { PhotoIcon } from '@heroicons/react/24/solid';
-import { useState } from 'react';
+import Button from "@/components/button";
+import Input from "@/components/input";
+import SocialLogin from "@/components/social-login";
+import { useFormState } from "react-dom";
+import { createAccountAction } from "./action";
+import { PASSWORD_MIN_LENGTH } from "@/lib/constants";
+import { getUploadUrl } from "@/app/products/add/actions";
+import { PhotoIcon } from "@heroicons/react/24/solid";
+import { useState } from "react";
 
 export default function CreateAccount() {
-  const [preview, setPreview] = useState('');
-  const [uploadUrl, setUploadUrl] = useState('');
-  const [photoId, setPhotoId] = useState('');
+  const [preview, setPreview] = useState("");
+  const [uploadUrl, setUploadUrl] = useState("");
+  const [photoId, setPhotoId] = useState("");
   const onImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
       target: { files },
@@ -23,9 +23,9 @@ export default function CreateAccount() {
     }
     const file = files[0];
 
-    if (!file.type.startsWith('image/')) {
+    if (!file.type.startsWith("image/")) {
       return {
-        error: '이미지 파일만 업로드 가능합니다. ',
+        error: "이미지 파일만 업로드 가능합니다. ",
       };
     }
 
@@ -34,7 +34,7 @@ export default function CreateAccount() {
     if (fileSizeInMd > 2) {
       return {
         error:
-          '이미지의 크기가 2MD를 초과하는 이미지는 업로드 할 수 없습니다. ',
+          "이미지의 크기가 2MD를 초과하는 이미지는 업로드 할 수 없습니다. ",
       };
     }
     const url = URL.createObjectURL(file);
@@ -49,22 +49,22 @@ export default function CreateAccount() {
   };
 
   const interceptAction = async (prevState: any, formData: FormData) => {
-    const file = formData.get('avatar');
+    const file = formData.get("avatar");
     if (!file) {
       return;
     }
     const cloudflareForm = new FormData();
-    cloudflareForm.append('file', file);
+    cloudflareForm.append("file", file);
     const response = await fetch(uploadUrl, {
-      method: 'POST',
+      method: "POST",
       body: cloudflareForm,
     });
     console.log(await response.text());
     if (response.status !== 200) {
       return;
     }
-    const photoUrl = `https://imagedelivery.net/2YRH3jpkhrWOOYZOL3zGhA/2df9c2a9-e527-4e70-f9f1-2a3d5fca9b00`;
-    formData.set('avatar', photoUrl);
+    const photoUrl = `https://imagedelivery.net/5d0LqFK4H5JncIwtTJ4IZg/2df9c2a9-e527-4e70-f9f1-2a3d5fca9b00`;
+    formData.set("avatar", photoUrl);
     return createAccountAction(prevState, formData);
   };
   const [state, dispatch] = useFormState(interceptAction, null);

@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import Button from '@/components/button';
-import Input from '@/components/input';
-import { PhotoIcon } from '@heroicons/react/24/solid';
-import { useState } from 'react';
-import { getUploadUrl, uploadProduct } from './actions';
-import { useFormState } from 'react-dom';
-import BeforePage from '@/components/BeforePage';
+import Button from "@/components/button";
+import Input from "@/components/input";
+import { PhotoIcon } from "@heroicons/react/24/solid";
+import { useState } from "react";
+import { getUploadUrl, uploadProduct } from "./actions";
+import { useFormState } from "react-dom";
+import BeforePage from "@/components/BeforePage";
 
 export default function AddProduct() {
-  const [preview, setPreview] = useState('');
-  const [uploadUrl, setUploadUrl] = useState('');
-  const [photoId, setPhotoId] = useState('');
+  const [preview, setPreview] = useState("");
+  const [uploadUrl, setUploadUrl] = useState("");
+  const [photoId, setPhotoId] = useState("");
   const onImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
       target: { files },
@@ -21,9 +21,9 @@ export default function AddProduct() {
     }
     const file = files[0];
 
-    if (!file.type.startsWith('image/')) {
+    if (!file.type.startsWith("image/")) {
       return {
-        error: '이미지 파일만 업로드 가능합니다. ',
+        error: "이미지 파일만 업로드 가능합니다. ",
       };
     }
 
@@ -32,7 +32,7 @@ export default function AddProduct() {
     if (fileSizeInMd > 2) {
       return {
         error:
-          '이미지의 크기가 2MD를 초과하는 이미지는 업로드 할 수 없습니다. ',
+          "이미지의 크기가 2MD를 초과하는 이미지는 업로드 할 수 없습니다. ",
       };
     }
     const url = URL.createObjectURL(file);
@@ -47,22 +47,22 @@ export default function AddProduct() {
   };
 
   const interceptAction = async (prevState: any, formData: FormData) => {
-    const file = formData.get('photo');
+    const file = formData.get("photo");
     if (!file) {
       return;
     }
     const cloudflareForm = new FormData();
-    cloudflareForm.append('file', file);
+    cloudflareForm.append("file", file);
     const response = await fetch(uploadUrl, {
-      method: 'POST',
+      method: "POST",
       body: cloudflareForm,
     });
     console.log(await response.text());
     if (response.status !== 200) {
       return;
     }
-    const photoUrl = `https://imagedelivery.net/2YRH3jpkhrWOOYZOL3zGhA/${photoId}`;
-    formData.set('photo', photoUrl);
+    const photoUrl = `https://imagedelivery.net/5d0LqFK4H5JncIwtTJ4IZg/${photoId}`;
+    formData.set("photo", photoUrl);
     return uploadProduct(prevState, formData);
   };
   const [state, action] = useFormState(interceptAction, null);

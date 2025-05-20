@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { ChevronLeftIcon, XMarkIcon } from '@heroicons/react/24/solid';
-import { useRouter } from 'next/navigation';
+import { ChevronLeftIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { useRouter } from "next/navigation";
 
 export default function BeforePage() {
   const router = useRouter();
