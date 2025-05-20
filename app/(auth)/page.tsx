@@ -7,7 +7,12 @@ export default function Home() {
     <div className="flex flex-col justify-between items-center min-h-screen">
       <div className="my-auto flex flex-col items-center gap-2 *:font-medium">
         <span className="text-9xl animate-bounce transition-transform">
-          <Image src="/main.png" alt="헬스 이미지" width={200} height={200} />
+          <Image
+            src="/img-mascot.png"
+            alt="헬스 이미지"
+            width={200}
+            height={200}
+          />
         </span>
         <h1 className="text-4xl font-semibold text-red-400 ">CampusLink</h1>
         <h2 className="text-2xl">캠퍼스 입장</h2>

@@ -147,7 +147,12 @@ export default function Live() {
           justify-center py-3 px-2 mt-32 mx-2 bg-neutral-700 gap-2 rounded-xl
           "
           >
-            <Image src={"/main.png"} alt="운동감자" width={50} height={50} />
+            <Image
+              src={"/img-mascot.png"}
+              alt="운동감자"
+              width={50}
+              height={50}
+            />
             <p className="text-md">{getMessageForStatus()}</p>
           </div>
         )}

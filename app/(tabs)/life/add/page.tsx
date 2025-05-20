@@ -20,7 +20,7 @@ export default function AddLife() {
             <h1 className="text-center text-xl p-2">
               와우의 이야기를 들려주세요
             </h1>
-            <Image src={"/main.png"} alt="운동" width={50} height={50} />
+            <Image src={"/img-mascot.png"} alt="운동" width={50} height={50} />
           </div>
           <div className="flex gap-2 flex-col">
             <h1>제목을 입력하세요</h1>
