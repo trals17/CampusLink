@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image from "next/image";
 
 export default function Loading() {
   return (
@@ -14,7 +14,7 @@ export default function Loading() {
         className="text-center
       font-semibold text-lg"
       >
-        앞사람이 덤벨 훔쳐가는 중 ...
+        티동 재건축 중 ...
       </h1>
     </div>
   );

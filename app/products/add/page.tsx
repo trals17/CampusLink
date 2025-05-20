@@ -72,7 +72,7 @@ export default function AddProduct() {
       <form className="p-5 flex flex-col gap-5" action={action}>
         <div className="flex flex-row justify-center items-center">
           <BeforePage />
-          <h1 className="text-center text-2xl">헬짱의 물품을 판매해주세요. </h1>
+          <h1 className="text-center text-2xl">물품을 판매해주세요. </h1>
         </div>
         <label
           htmlFor="photo"

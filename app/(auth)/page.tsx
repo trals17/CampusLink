@@ -1,6 +1,6 @@
-import Link from 'next/link';
-import '@/lib/db';
-import Image from 'next/image';
+import Link from "next/link";
+import "@/lib/db";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -9,8 +9,8 @@ export default function Home() {
         <span className="text-9xl animate-bounce transition-transform">
           <Image src="/main.png" alt="헬스 이미지" width={200} height={200} />
         </span>
-        <h1 className="text-4xl font-semibold text-red-400 ">운동감자</h1>
-        <h2 className="text-2xl">운동하는 감자가 되자</h2>
+        <h1 className="text-4xl font-semibold text-red-400 ">CampusLink</h1>
+        <h2 className="text-2xl">캠퍼스 입장</h2>
       </div>
       <div className="flex flex-col items-center gap-3 w-full p-6">
         <Link href="/create-account" className="primary-btn py-2 text-lg">

@@ -73,10 +73,8 @@ export default function CreateAccount() {
       <div className="flex flex-col gap-2 *:font-medium">
         <h1 className="text-2xl">안녕하세요!</h1>
         <h2 className="text-xl">
-          <strong className="text-lg font-bold text-yellow-600">
-            운동감자
-          </strong>
-          가 될 준비가 되셨나요 ?
+          <strong className="text-lg font-bold text-yellow-600">학우들</strong>
+          과 함께 할 준비가 되셨나요 ?
         </h2>
       </div>
       <form action={dispatch} className="flex flex-col gap-3 ">
@@ -109,21 +107,21 @@ export default function CreateAccount() {
           type="text"
           required
           name="username"
-          placeholder="운동감자의 이름은"
+          placeholder="그대의 이름은"
           errors={state?.fieldErrors.username}
         />
         <Input
           name="email"
           type="email"
           required
-          placeholder="운동감자의 이메일은"
+          placeholder="그대의 이메일은"
           errors={state?.fieldErrors.email}
         />
         <Input
           name="password"
           type="password"
           required
-          placeholder="운동감자의 비밀스런 비밀번호는?"
+          placeholder="그대의 비밀스런 비밀번호는?"
           errors={state?.fieldErrors.password}
           minLength={PASSWORD_MIN_LENGTH}
         />
@@ -131,7 +129,7 @@ export default function CreateAccount() {
           name="comfirmPassword"
           type="password"
           required
-          placeholder="운동감자의 비밀스런 비밀번호를 다시.."
+          placeholder="그대의 비밀스런 비밀번호를 다시.."
           errors={state?.fieldErrors.comfirmPassword}
           minLength={PASSWORD_MIN_LENGTH}
         />
