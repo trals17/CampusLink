@@ -62,7 +62,7 @@ export default function TabBar() {
           ) : (
             <OutlineUserIcon className="size-7" />
           )}
-          <span></span>
+          <span>홍대 생활</span>
         </Link>
       </div>
     </>

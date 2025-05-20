@@ -1,14 +1,14 @@
-import db from '@/lib/db';
-import { formatToTimeAgo } from '@/lib/utils';
+import db from "@/lib/db";
+import { formatToTimeAgo } from "@/lib/utils";
 import {
   ChatBubbleBottomCenterIcon,
   HandThumbUpIcon,
-} from '@heroicons/react/24/outline';
-import { PlusIcon } from '@heroicons/react/24/solid';
-import Link from 'next/link';
-import { unstable_cache as nextCache, revalidateTag } from 'next/cache';
-import { notFound } from 'next/navigation';
-import Image from 'next/image';
+} from "@heroicons/react/24/outline";
+import { PlusIcon } from "@heroicons/react/24/solid";
+import Link from "next/link";
+import { unstable_cache as nextCache, revalidateTag } from "next/cache";
+import { notFound } from "next/navigation";
+import Image from "next/image";
 
 async function getPosts() {
   const posts = await db.post.findMany({
@@ -29,12 +29,12 @@ async function getPosts() {
   return posts;
 }
 
-const getCachedPosts = nextCache(getPosts, ['posts-list'], {
-  tags: ['posts-list'],
+const getCachedPosts = nextCache(getPosts, ["posts-list"], {
+  tags: ["posts-list"],
 });
 
 export const metadata = {
-  title: '운동감자',
+  title: "운동감자",
 };
 
 export default async function Life() {
@@ -48,7 +48,7 @@ export default async function Life() {
       <div className="border-b border-neutral-600 pb-5">
         <h1 className="text-center text-3xl flex flex-row justify-center items-center">
           <Image src="/설렘감자.png" alt="설렘감자" width={60} height={60} />
-          <strong className="text-yellow-600">운동감자</strong>들의 이야기
+          <strong className="text-yellow-600">와우</strong>의 이야기
         </h1>
       </div>
       {posts.map((post) => (

@@ -40,9 +40,7 @@ export default function EditProfile({ user }: User) {
     const fileSizeInMb = file.size / (1024 * 1024);
 
     if (fileSizeInMb > 2) {
-      return alert(
-        "이미지의 크기가 2MB를 초과하는 이미지는 업로드 할 수 없습니다."
-      );
+      return alert("2MB를 초과하는 이미지는 업로드 할 수 없습니다.");
     }
 
     const url = URL.createObjectURL(file);

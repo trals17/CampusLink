@@ -1,17 +1,17 @@
 // pages/live.tsx
-'use client';
+"use client";
 
-import ChooseStatus from '@/components/chooseStatus';
-import { checkStreamStatus, getStreams } from './actions';
-import { getStreamVideo } from '@/app/streams/[id]/action';
-import Image from 'next/image';
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { useState, useEffect } from 'react';
-import { ClockIcon, PlusIcon } from '@heroicons/react/24/solid';
+import ChooseStatus from "@/components/chooseStatus";
+import { checkStreamStatus, getStreams } from "./actions";
+import { getStreamVideo } from "@/app/streams/[id]/action";
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { useState, useEffect } from "react";
+import { ClockIcon, PlusIcon } from "@heroicons/react/24/solid";
 
 export default function Live() {
-  const [selectedStatus, setSelectedStatus] = useState<string | null>('생방송');
+  const [selectedStatus, setSelectedStatus] = useState<string | null>("생방송");
   const [streams, setStreams] = useState<any[]>([]);
   const [filteredStreams, setFilteredStreams] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true); // 로딩 상태 변수
@@ -54,14 +54,14 @@ export default function Live() {
   // 상태에 맞는 메시지 선택
   const getMessageForStatus = () => {
     switch (selectedStatus) {
-      case 'connected':
-        return '운동중인 운동감자가 없습니다.';
-      case 'disconnected':
-        return '종료된 운동감자가 없습니다.';
+      case "connected":
+        return "진행중인 라이브가 없습니다.";
+      case "disconnected":
+        return "종료된 라이브가 없습니다.";
       case null:
-        return '준비중인 운동감자가 없습니다. ';
+        return "준비중인 라이브가 없습니다. ";
       default:
-        return '선택된 상태의 운동감자가 없습니다.';
+        return "선택된 상태의 라이브가 없습니다.";
     }
   };
 
@@ -97,7 +97,7 @@ export default function Live() {
                     className="w-full h-full object-cover rounded-lg"
                     width={50}
                     height={50}
-                    onClick={() => window.open(stream.video.preview, '_blank')}
+                    onClick={() => window.open(stream.video.preview, "_blank")}
                   />
                 ) : (
                   <div className="w-full h-full bg-gray-200 rounded-lg flex items-center justify-center text-neutral-400 ">
@@ -142,7 +142,7 @@ export default function Live() {
           justify-center py-3 px-2 mt-32 mx-2 bg-neutral-700 gap-2 rounded-xl
           "
           >
-            <Image src={'/main.png'} alt="운동감자" width={50} height={50} />
+            <Image src={"/main.png"} alt="운동감자" width={50} height={50} />
             <p className="text-md">{getMessageForStatus()}</p>
           </div>
         )}

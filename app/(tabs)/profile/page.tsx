@@ -1,22 +1,22 @@
-import db from '@/lib/db';
-import getSession from '@/lib/session';
-import { formatToTimeAgo } from '@/lib/utils';
+import db from "@/lib/db";
+import getSession from "@/lib/session";
+import { formatToTimeAgo } from "@/lib/utils";
 import {
   BellAlertIcon,
   ClipboardDocumentListIcon,
   FaceFrownIcon,
   PencilSquareIcon,
   ExclamationTriangleIcon,
-} from '@heroicons/react/24/outline';
+} from "@heroicons/react/24/outline";
 import {
   ChevronRightIcon,
   HandThumbUpIcon,
   HandThumbDownIcon,
-} from '@heroicons/react/24/solid';
-import Image from 'next/image';
-import Link from 'next/link';
-import { notFound, redirect } from 'next/navigation';
-import { logOut } from './leave/actions';
+} from "@heroicons/react/24/solid";
+import Image from "next/image";
+import Link from "next/link";
+import { notFound, redirect } from "next/navigation";
+import { logOut } from "./leave/actions";
 
 async function getUser() {
   const session = await getSession();
@@ -64,7 +64,7 @@ export default async function Profile() {
           className="pl-2"
         />
         <h1 className="text-center text-3xl">
-          나의 <strong className="text-yellow-600">운동감자</strong> 생활
+          나의 <strong className="text-yellow-600">홍대</strong> 생활
         </h1>
       </div>
       <div className="flex justify-between items-center border-2 border-opacity-30 rounded-xl px-5 py-3">
@@ -123,7 +123,7 @@ export default async function Profile() {
           <button>로그아웃</button>
         </form>
         <Link
-          href={'/profile/leave'}
+          href={"/profile/leave"}
           className="flex flex-row items-center gap-3"
         >
           <ExclamationTriangleIcon className="size-8 text-red-500" />
