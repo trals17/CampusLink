@@ -1,15 +1,13 @@
-// app/api/auth/github/route.ts
-
-import { NextResponse } from "next/server";
+import { redirect } from "next/navigation";
 
 export async function GET() {
   const baseURL = "https://github.com/login/oauth/authorize";
   const params = {
-    client_id: process.env.GITHUB_CLIENT_ID!, // Vercel env 세팅 확인 필요
+    client_id: process.env.GITHUB_CLIENT_ID!,
     scope: "read:user,user:email",
     allow_signup: "true",
   };
-  const finalUrl = `${baseURL}?${new URLSearchParams(params)}`;
-
-  return NextResponse.redirect(finalUrl);
+  const formattedParams = new URLSearchParams(params).toString();
+  const finalUrl = `${baseURL}?${formattedParams}`;
+  return redirect(finalUrl);
 }
