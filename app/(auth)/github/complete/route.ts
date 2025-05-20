@@ -1,14 +1,14 @@
-import { Auth } from '@/lib/auth';
-import db from '@/lib/db';
+import { Auth } from "@/lib/auth";
+import db from "@/lib/db";
 import {
   getGitHubAccessToken,
   getGitHubUserEmail,
   getGitHubUserProfile,
-} from '@/lib/github';
-import { NextRequest, NextResponse } from 'next/server';
+} from "@/lib/github";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
-  const code = request.nextUrl.searchParams.get('code');
+  const code = request.nextUrl.searchParams.get("code");
   if (!code) {
     return new Response(null, {
       status: 400,
@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
   // GitHub ID로 사용자 조회
   const user = await db.user.findUnique({
     where: {
-      github_id: id + '',
+      github_id: id + "",
     },
     select: {
       id: true,
@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
   });
 
   if (findEmail) {
-    return new NextResponse('Email is already in use.', {
+    return new NextResponse("Email is already in use.", {
       status: 400,
     });
   }
@@ -67,7 +67,7 @@ export async function GET(request: NextRequest) {
   const newUser = await db.user.create({
     data: {
       username: findUsername ? `${login}${timeStamp}` : login,
-      github_id: id + '',
+      github_id: id + "",
       avatar: avatar_url,
       email,
     },
