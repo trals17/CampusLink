@@ -58,7 +58,7 @@ export default async function Profile() {
       <div className="flex flex-row items-center gap-2">
         <Image
           src="/cow_pen_tool.png"
-          alt="운동감자"
+          alt="CampusLink"
           width={80}
           height={80}
           className="pl-2"

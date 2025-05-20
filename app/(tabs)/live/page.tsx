@@ -149,7 +149,7 @@ export default function Live() {
           >
             <Image
               src={"/img-mascot.png"}
-              alt="운동감자"
+              alt="CampusLink"
               width={50}
               height={50}
             />

@@ -1,33 +1,33 @@
-import type { Metadata } from 'next';
-import { Poor_Story, Dongle, Gothic_A1, Hahmlet } from 'next/font/google';
-import './globals.css';
+import type { Metadata } from "next";
+import { Poor_Story, Dongle, Gothic_A1, Hahmlet } from "next/font/google";
+import "./globals.css";
 
 const poor = Poor_Story({
-  subsets: ['latin'],
-  weight: ['400'],
-  style: ['normal'],
-  variable: '--poor-text',
+  subsets: ["latin"],
+  weight: ["400"],
+  style: ["normal"],
+  variable: "--poor-text",
 });
 
 const hahmlet = Hahmlet({
-  subsets: ['latin'],
-  weight: ['300'],
-  style: ['normal'],
-  variable: '--hahmlet-text',
+  subsets: ["latin"],
+  weight: ["300"],
+  style: ["normal"],
+  variable: "--hahmlet-text",
 });
 
 const dongle = Dongle({
-  subsets: ['latin'],
-  weight: ['300'],
-  style: ['normal'],
+  subsets: ["latin"],
+  weight: ["300"],
+  style: ["normal"],
 });
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | 운동감자',
-    default: '운동감자',
+    template: "%s | CampusLink",
+    default: "CampusLink",
   },
-  description: 'Sell and buy all the things',
+  description: "Sell and buy all the things",
 };
 
 export default function RootLayout({
