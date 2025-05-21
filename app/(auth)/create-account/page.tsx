@@ -79,7 +79,7 @@ export default function CreateAccount() {
       <form action={dispatch} className="flex flex-col gap-3 ">
         <label
           htmlFor="avatar"
-          className="border-2 aspect-square items-center justify-center flex-col text-neutral-300 border-neutral-300 rounded-md border-dashed cursor-pointer bg-center bg-cover size-40 text-center hidden"
+          className="border-2 aspect-square flex items-center justify-center flex-col text-neutral-300 border-neutral-300 rounded-md border-dashed cursor-pointer bg-center bg-cover size-40 text-center"
           style={{
             backgroundImage: `url(${preview})`,
           }}
