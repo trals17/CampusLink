@@ -1,6 +1,6 @@
-import { formatToTimeAgo, formatToWon, ProductStatus } from '@/lib/utils';
-import Image from 'next/image';
-import Link from 'next/link';
+import { formatToTimeAgo, formatToWon, ProductStatus } from "@/lib/utils";
+import Image from "next/image";
+import Link from "next/link";
 
 interface ListProductProps {
   title: string;
@@ -24,14 +24,14 @@ export default function ListProduct({
 
   return (
     <>
-      {status === 'SOLD_OUT' ? null : (
+      {status === "SOLD_OUT" ? null : (
         <>
           <Link href={`/products/${id}`} className="flex gap-5">
             <div className="relative size-28 rounded-md overflow-hidden">
               <Image
                 fill
                 priority
-                src={`${photo}/avatar`}
+                src={`${photo}`}
                 className="object-cover"
                 alt={title}
               />
@@ -44,7 +44,7 @@ export default function ListProduct({
                 </span>
 
                 <div className="flex flex-row items-center gap-2">
-                  {status === 'RESERVED' ? (
+                  {status === "RESERVED" ? (
                     <span className="rounded-full px-2 py-1 text-sm bg-orange-500">
                       {displayedStatus}
                     </span>

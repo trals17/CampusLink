@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { InitialProducts } from '@/app/(tabs)/home/page';
-import ListProduct from './list-product';
-import { useEffect, useRef, useState } from 'react';
-import { getMoreProducts } from '@/app/(tabs)/home/actions';
-import { revalidateTag } from 'next/cache';
-import { ProductStatus } from '@/lib/utils';
+import { InitialProducts } from "@/app/(tabs)/home/page";
+import ListProduct from "./list-product";
+import { useEffect, useRef, useState } from "react";
+import { getMoreProducts } from "@/app/(tabs)/home/actions";
+import { revalidateTag } from "next/cache";
+import { ProductStatus } from "@/lib/utils";
 
 interface ProductListProps {
   initialProducts: InitialProducts;
