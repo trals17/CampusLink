@@ -1,81 +1,72 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
+import { useFormState } from "react-dom";
+import { PhotoIcon } from "@heroicons/react/24/solid";
+import { getUploadUrl } from "@/app/products/add/actions";
+import EditAction from "@/app/products/[id]/edit/actions";
 import Input from "./input";
 import Button from "./button";
-import { useState } from "react";
 
-import EditAction from "@/app/products/[id]/edit/actions";
-import { useFormState } from "react-dom";
-import { getUploadUrl } from "@/app/products/add/actions";
-
-interface IEditProps {
+interface EditFormProps {
   product: {
     id: number;
-    title: string;
     photo: string;
-    description: string;
+    title: string;
     price: number;
+    description: string;
   };
 }
 
-export default function EditForm({ product }: IEditProps) {
-  const [preview, setPreview] = useState<string | null>(null);
-  const [uploadUrl, setUploadUrl] = useState<string>("");
-  const [photoId, setPhotoId] = useState<string>("");
+export default function EditForm({ product }: EditFormProps) {
+  // 기존 photo URL을 초기 preview로 설정
+  const [preview, setPreview] = useState<string>(product.photo);
+  const [uploadUrl, setUploadUrl] = useState("");
+  const [photoId, setPhotoId] = useState("");
+  const [hasNewFile, setHasNewFile] = useState(false);
 
+  // 파일 선택 시 실행
   const onImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {
-      target: { files },
-    } = e;
-    if (!files) {
-      return;
-    }
+    const { files } = e.target;
+    if (!files) return;
     const file = files[0];
-
     if (!file.type.startsWith("image/")) {
-      return {
-        error: "이미지 파일만 업로드 가능합니다.",
-      };
+      return alert("이미지 파일만 업로드 가능합니다.");
     }
-
-    const fileSizeInMb = file.size / (1024 * 1024);
-
-    if (fileSizeInMb > 2) {
-      return {
-        error: "이미지의 크기가 2MB를 초과하는 이미지는 업로드 할 수 없습니다.",
-      };
+    if (file.size / 1024 / 1024 > 2) {
+      return alert("2MB를 초과하는 이미지는 업로드 할 수 없습니다.");
     }
-
-    // 새로 선택된 이미지의 미리보기 URL 생성
-    const url = URL.createObjectURL(file);
-    setPreview(url);
-
-    // 업로드 URL 가져오기
+    // 로컬 미리보기
+    setPreview(URL.createObjectURL(file));
+    setHasNewFile(true);
+    // Cloudflare 업로드 URL 요청
     const { result, success } = await getUploadUrl();
     if (success) {
-      const { id, uploadURL } = result;
-      setUploadUrl(uploadURL);
-      setPhotoId(id);
+      setUploadUrl(result.uploadURL);
+      setPhotoId(result.id);
     }
   };
 
+  // 폼 제출 인터셉트
   const interceptAction = async (prevState: any, formData: FormData) => {
-    const file = formData.get("photo");
-    if (file instanceof File) {
-      // 파일 객체인지 확인
-      const cloudflareForm = new FormData();
-      cloudflareForm.append("file", file);
-      const response = await fetch(uploadUrl, {
-        method: "post",
-        body: cloudflareForm,
-      });
-      console.log(await response.text());
-      if (response.status !== 200) {
-        return;
+    if (hasNewFile) {
+      const file = formData.get("photo");
+      if (file instanceof File) {
+        const cfForm = new FormData();
+        cfForm.append("file", file);
+        const resp = await fetch(uploadUrl, { method: "POST", body: cfForm });
+        if (!resp.ok) return;
+        const data = await resp.json();
+        const imageId = data.result?.id ?? photoId;
+        const publicUrl =
+          data.result?.variants?.[0] ||
+          `https://imagedelivery.net/${process.env.NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_HASH}/${imageId}/public`;
+        formData.set("photo", publicUrl);
       }
-      const photoUrl = `https://imagedelivery.net/5d0LqFK4H5JncIwtTJ4IZg/${photoId}`;
-      formData.set("photo", photoUrl);
+    } else {
+      // 새 파일 없으면 기존 URL 사용
+      formData.set("photo", product.photo);
     }
     return EditAction(prevState, formData);
   };
@@ -83,63 +74,59 @@ export default function EditForm({ product }: IEditProps) {
   const [state, action] = useFormState(interceptAction, null);
 
   return (
-    <div>
-      <form className="p-5 flex flex-col gap-5" action={action}>
-        <div className="relative aspect-square w-full bg-contain">
-          {preview ? (
-            <label
-              htmlFor="photo"
-              className="border-2 aspect-square flex items-center justify-center flex-col text-neutral-300 border-neutral-300 rounded-md border-dashed cursor-pointer bg-center bg-cover"
-              style={{
-                backgroundImage: `url(${preview})`,
-              }}
-            />
-          ) : (
-            <Image
-              src={`${product.photo}/public`}
-              alt={product.title}
-              fill
-              className="object-cover rounded-md"
-            />
-          )}
-        </div>
+    <form
+      action={action}
+      method="post"
+      encType="multipart/form-data"
+      className="flex flex-col gap-4"
+    >
+      {/* 상품 ID 숨김 필드 */}
+      <input type="hidden" name="id" value={product.id} />
 
-        <input
-          onChange={onImageChange}
-          type="file"
-          id="photo"
-          name="photo"
-          accept="image/*"
-          className="mt-2"
-        />
-        <input type="hidden" name="id" value={product.id} />
+      {/* 사진 미리보기 및 파일 입력 */}
+      <label
+        htmlFor="photo"
+        className="w-32 h-32 rounded-full bg-gray-200 bg-center bg-cover"
+        style={{ backgroundImage: `url(${preview})` }}
+      >
+        {!preview && <PhotoIcon className="w-16 h-16 text-gray-400" />}
+      </label>
+      <input
+        id="photo"
+        name="photo"
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={onImageChange}
+      />
 
-        <Input
-          name="title"
-          required
-          placeholder="제목"
-          type="text"
-          errors={[]}
-          defaultValue={product.title}
-        />
-        <Input
-          name="price"
-          type="number"
-          required
-          placeholder="가격"
-          errors={[]}
-          defaultValue={product.price}
-        />
-        <Input
-          name="description"
-          type="text"
-          required
-          placeholder="자세한 설명"
-          errors={[]}
-          defaultValue={product.description}
-        />
-        <Button text="작성 완료" />
-      </form>
-    </div>
+      {/* 기타 입력 필드 */}
+      <Input
+        name="title"
+        type="text"
+        placeholder="제목"
+        required
+        defaultValue={product.title}
+        errors={state?.fieldErrors?.title}
+      />
+      <Input
+        name="price"
+        type="number"
+        placeholder="가격"
+        required
+        defaultValue={product.price.toString()}
+        errors={state?.fieldErrors?.price}
+      />
+      <Input
+        name="description"
+        type="text"
+        placeholder="설명"
+        required
+        defaultValue={product.description}
+        errors={state?.fieldErrors?.description}
+      />
+
+      <Button type="submit" text="수정 완료" />
+    </form>
   );
 }
