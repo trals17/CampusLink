@@ -70,7 +70,7 @@ export default async function Profile() {
       <div className="flex justify-between items-center border-2 border-opacity-30 rounded-xl px-5 py-3">
         <div className="flex flex-row items-center gap-3 rounded-full">
           <Image
-            src={`${user.avatar}/public`}
+            src={user.avatar!}
             alt={user.username}
             className="rounded-full object-cover aspect-square"
             width={60}
