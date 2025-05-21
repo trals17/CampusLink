@@ -1,16 +1,16 @@
-import DeleteStreamBtn from '@/components/DeleteStreamBtn';
-import LiveStreamChat from '@/components/LiveStreamChat';
-import LiveStreamingVideos from '@/components/LiveStreamingVideos';
-import db from '@/lib/db';
-import getSession from '@/lib/session';
+import DeleteStreamBtn from "@/components/DeleteStreamBtn";
+import LiveStreamChat from "@/components/LiveStreamChat";
+import LiveStreamingVideos from "@/components/LiveStreamingVideos";
+import db from "@/lib/db";
+import getSession from "@/lib/session";
 import {
   HandRaisedIcon,
   VideoCameraIcon,
   VideoCameraSlashIcon,
-} from '@heroicons/react/24/outline';
-import { UserIcon } from '@heroicons/react/24/solid';
-import Image from 'next/image';
-import { notFound } from 'next/navigation';
+} from "@heroicons/react/24/outline";
+import { UserIcon } from "@heroicons/react/24/solid";
+import Image from "next/image";
+import { notFound } from "next/navigation";
 
 async function getStream(id: number) {
   const stream = await db.liveStream.findUnique({
@@ -35,42 +35,42 @@ async function getStream(id: number) {
 }
 
 async function checkStreamStatus(streamId: string) {
-  if (!process.env.CLOUDFLARE_ACCOUNT_ID || !process.env.CLOUDFLARE_TOKEN) {
-    console.error('Cloudflare environment variables are not defined');
-    return 'unknown';
+  if (!process.env.CLOUDFLARE_ACCOUNT_ID || !process.env.CLOUDFLARE_API_KEY) {
+    console.error("Cloudflare environment variables are not defined");
+    return "unknown";
   }
 
   const response = await fetch(
     `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/stream/live_inputs/${streamId}`,
     {
-      method: 'GET',
+      method: "GET",
       headers: {
-        Authorization: `Bearer ${process.env.CLOUDFLARE_TOKEN}`,
+        Authorization: `Bearer ${process.env.CLOUDFLARE_API_KEY}`,
       },
     }
   );
 
   if (!response.ok) {
-    console.error('Failed to fetch stream status');
-    return 'unknown'; // 오류 발생 시 'unknown' 상태로 설정
+    console.error("Failed to fetch stream status");
+    return "unknown"; // 오류 발생 시 'unknown' 상태로 설정
   }
 
   const data = await response.json();
-  console.log('API 응답 데이터:', data);
+  console.log("API 응답 데이터:", data);
 
   if (data && data.result) {
     const status = data.result.status?.current?.state;
-    console.log('Stream 상태 데이터:', status);
+    console.log("Stream 상태 데이터:", status);
 
     // status가 없을 경우 '준비중' 상태로 반환
     if (!status) {
-      console.log('No current state found, defaulting to 준비중');
-      return '준비중';
+      console.log("No current state found, defaulting to 준비중");
+      return "준비중";
     }
     return status;
   } else {
-    console.error('No result found in API response:', data);
-    return 'unknown'; // 결과가 없을 시에도 'unknown' 상태로 설정
+    console.error("No result found in API response:", data);
+    return "unknown"; // 결과가 없을 시에도 'unknown' 상태로 설정
   }
 }
 
@@ -95,17 +95,17 @@ export default async function StreamDetail({
   return (
     <>
       <div className="p-5">
-        {streamStatus === 'connected' ? (
+        {streamStatus === "connected" ? (
           <div className="flex flex-row items-center">
             <VideoCameraIcon className="h-7 w-7 text-red-600" />
             <h1 className="text-white text-2xl p-3">Live</h1>
           </div>
-        ) : streamStatus === 'disconnected' ? (
+        ) : streamStatus === "disconnected" ? (
           <div className="flex flex-row items-center gap-3">
             <VideoCameraSlashIcon className="h-7 w-7 text-red-600" />
             <h1 className="text-2xl">라이브가 종료되었습니다.</h1>
           </div>
-        ) : streamStatus === '준비중' ? (
+        ) : streamStatus === "준비중" ? (
           <div className="flex flex-row items-center gap-3">
             <HandRaisedIcon className="h-7 w-7 text-yellow-400" />
             <h1 className="text-2xl">잠시만 기다려주세요!</h1>
@@ -118,13 +118,13 @@ export default async function StreamDetail({
         )}
 
         <div className="relative aspect-video">
-          {streamStatus === 'connected' ? (
+          {streamStatus === "connected" ? (
             <iframe
               src={`https://${process.env.CLOUDFLARE_DOMAIN}/${stream.stream_id}/iframe`}
               allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
               className="w-full h-full rounded-md"
             ></iframe>
-          ) : streamStatus === 'disconnected' ? (
+          ) : streamStatus === "disconnected" ? (
             <LiveStreamingVideos stream_id={stream.stream_id} />
           ) : (
             <div className="flex items-center justify-center h-full">

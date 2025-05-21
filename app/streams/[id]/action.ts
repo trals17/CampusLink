@@ -1,15 +1,15 @@
-'use server';
+"use server";
 
-import db from '@/lib/db';
-import getSession from '@/lib/session';
+import db from "@/lib/db";
+import getSession from "@/lib/session";
 
 export async function getStreamVideo(input_UID: string) {
   const response = await fetch(
     `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/stream/live_inputs/${input_UID}/videos`,
     {
-      method: 'GET',
+      method: "GET",
       headers: {
-        Authorization: `Bearer ${process.env.CLOUDFLARE_TOKEN}`,
+        Authorization: `Bearer ${process.env.CLOUDFLARE_API_KEY}`,
       },
     }
   );
@@ -23,9 +23,9 @@ export async function deleteStream(input_UID: string, id: number) {
     const response = await fetch(
       `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/stream/live_inputs/${input_UID}`,
       {
-        method: 'DELETE',
+        method: "DELETE",
         headers: {
-          Authorization: `Bearer ${process.env.CLOUDFLARE_TOKEN}`,
+          Authorization: `Bearer ${process.env.CLOUDFLARE_API_KEY}`,
         },
       }
     );
@@ -45,7 +45,7 @@ export async function deleteStream(input_UID: string, id: number) {
       },
     });
   } catch (error) {
-    console.error('Error deleting stream:', error);
+    console.error("Error deleting stream:", error);
     // 추가적인 에러 처리 로직
   }
 }

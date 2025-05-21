@@ -1,19 +1,19 @@
-'use server';
-import z from 'zod';
-import fs from 'fs/promises';
-import { File } from 'buffer';
-import db from '@/lib/db';
-import getSession from '@/lib/session';
-import { redirect } from 'next/navigation';
-import { productSchema } from './schema';
-import { revalidateTag } from 'next/cache';
+"use server";
+import z from "zod";
+import fs from "fs/promises";
+import { File } from "buffer";
+import db from "@/lib/db";
+import getSession from "@/lib/session";
+import { redirect } from "next/navigation";
+import { productSchema } from "./schema";
+import { revalidateTag } from "next/cache";
 
 export async function uploadProduct(prevState: any, formData: FormData) {
   const data = {
-    photo: formData.get('photo'),
-    price: formData.get('price'),
-    title: formData.get('title'),
-    description: formData.get('description'),
+    photo: formData.get("photo"),
+    price: formData.get("price"),
+    title: formData.get("title"),
+    description: formData.get("description"),
   };
 
   const result = productSchema.safeParse(data);
@@ -38,7 +38,7 @@ export async function uploadProduct(prevState: any, formData: FormData) {
           id: true,
         },
       });
-      revalidateTag('products-page');
+      revalidateTag("products-page");
 
       redirect(`/products/${product.id}`);
     }
@@ -49,9 +49,9 @@ export async function getUploadUrl() {
   const response = await fetch(
     `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/images/v2/direct_upload`,
     {
-      method: 'post',
+      method: "post",
       headers: {
-        Authorization: `Bearer ${process.env.CLOUDFLARE_TOKEN}`,
+        Authorization: `Bearer ${process.env.CLOUDFLARE_API_KEY}`,
       },
     }
   );

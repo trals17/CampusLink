@@ -31,8 +31,7 @@ export default function AddProduct() {
 
     if (fileSizeInMd > 2) {
       return {
-        error:
-          "이미지의 크기가 2MD를 초과하는 이미지는 업로드 할 수 없습니다. ",
+        error: "크기가 2MB를 초과하는 이미지는 업로드 할 수 없습니다. ",
       };
     }
     const url = URL.createObjectURL(file);

@@ -1,6 +1,6 @@
-'use server';
+"use server";
 
-import db from '@/lib/db';
+import db from "@/lib/db";
 
 export async function getStreams() {
   const streams = await db.liveStream.findMany({
@@ -25,27 +25,27 @@ export async function checkStreamStatus(streamId: string) {
   const response = await fetch(
     `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/stream/live_inputs/${streamId}`,
     {
-      method: 'GET',
+      method: "GET",
       headers: {
-        Authorization: `Bearer ${process.env.CLOUDFLARE_TOKEN}`,
+        Authorization: `Bearer ${process.env.CLOUDFLARE_ACCOUNT_ID}`,
       },
     }
   );
   if (!response.ok) {
-    console.error('Failed to fetch stream status');
-    return 'unknown';
+    console.error("Failed to fetch stream status");
+    return "unknown";
   }
 
   const data = await response.json();
-  console.log('API 응답 데이터:', data);
+  console.log("API 응답 데이터:", data);
 
   if (data && data.result) {
-    console.log('Stream 상태 데이터:', data.result.status);
+    console.log("Stream 상태 데이터:", data.result.status);
     const status = data.result.status?.current?.state;
     console.log(status);
     return status === undefined ? null : status;
   } else {
-    console.error('No result found in API response:', data);
-    return 'unknown';
+    console.error("No result found in API response:", data);
+    return "unknown";
   }
 }
