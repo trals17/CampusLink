@@ -6,12 +6,12 @@ interface SessionContent {
 }
 
 export default async function getSession() {
-  // 1) 반드시 await cookies()로 CookieStore를 가져옵니다.
+  // cookies()를 await해서 RequestCookies를 꺼낸 다음
   const cookieStore = await cookies();
 
-  // 2) 그 CookieStore를 getIronSession에 넘겨야 세션을 읽어올 수 있어요.
+  // 그걸 getIronSession에 넘겨야 세션을 제대로 읽어옵니다
   return getIronSession<SessionContent>(cookieStore, {
-    cookieName: "delicious-carrot",
+    cookieName: "campuslink-cookie",
     password: process.env.COOKIE_PASSWORD!,
   });
 }

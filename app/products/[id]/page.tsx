@@ -1,14 +1,16 @@
-import db from '@/lib/db';
-import getSession from '@/lib/session';
-import { formatToWon, ProductStatus } from '@/lib/utils';
-import { SunIcon, UserIcon } from '@heroicons/react/24/solid';
-import Image from 'next/image';
-import Link from 'next/link';
-import { notFound, redirect } from 'next/navigation';
-import { unstable_cache as nextCache, revalidateTag } from 'next/cache';
-import StatusSelector from '@/components/statusSelector';
-import CreateChatRoom from '@/components/createChatRoom';
-import BeforePage from '@/components/BeforePage';
+export const dynamic = "force-dynamic";
+
+import db from "@/lib/db";
+import getSession from "@/lib/session";
+import { formatToWon, ProductStatus } from "@/lib/utils";
+import { SunIcon, UserIcon } from "@heroicons/react/24/solid";
+import Image from "next/image";
+import Link from "next/link";
+import { notFound, redirect } from "next/navigation";
+import { unstable_cache as nextCache, revalidateTag } from "next/cache";
+import StatusSelector from "@/components/statusSelector";
+import CreateChatRoom from "@/components/createChatRoom";
+import BeforePage from "@/components/BeforePage";
 
 async function getIsOwner(userId: number) {
   const session = await getSession();
@@ -37,8 +39,8 @@ async function getProduct(id: number) {
   return product;
 }
 
-const getCachedProduct = nextCache(getProduct, ['product-detail'], {
-  tags: ['product-detail'],
+const getCachedProduct = nextCache(getProduct, ["product-detail"], {
+  tags: ["product-detail"],
 });
 
 async function getProductTitle(id: number) {
@@ -54,8 +56,8 @@ async function getProductTitle(id: number) {
   return product;
 }
 
-const getCachedProductTitle = nextCache(getProductTitle, ['product-title'], {
-  tags: ['product-title'],
+const getCachedProductTitle = nextCache(getProductTitle, ["product-title"], {
+  tags: ["product-title"],
 });
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
@@ -81,23 +83,23 @@ export default async function ProductDetail({
   const isOwner = await getIsOwner(product.userId);
 
   const onDelete = async () => {
-    'use server';
+    "use server";
     await db.product.delete({
       where: {
         id,
       },
     });
-    revalidateTag('product-detail');
-    redirect('/home');
+    revalidateTag("product-detail");
+    redirect("/home");
   };
 
   const handleStatusChange = async (newStatus: keyof typeof ProductStatus) => {
-    'use server';
+    "use server";
     await db.product.update({
       where: { id },
       data: { status: newStatus },
     });
-    revalidateTag('product-detail');
+    revalidateTag("product-detail");
     redirect(`/products/${id}`); // Redirect to the updated product page
   };
 
@@ -155,7 +157,7 @@ export default async function ProductDetail({
     fixed bottom-0 left-1/2 transform -translate-x-1/2 p-5 bg-neutral-800 flex justify-between items-center"
         >
           <span className="font-semibold text-lg">
-            {formatToWon(product.price)}원{' '}
+            {formatToWon(product.price)}원{" "}
           </span>
           {isOwner ? (
             <form action={onDelete}>
@@ -192,7 +194,7 @@ export async function generateStaticParams() {
 
   return products.map((product) => {
     return {
-      id: product.id + '',
+      id: product.id + "",
     };
   });
 }
