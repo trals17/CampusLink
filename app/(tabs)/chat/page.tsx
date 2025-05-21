@@ -54,7 +54,8 @@ export default async function Chat() {
                     <div className="flex-shrink-0">
                       {user.avatar ? (
                         <Image
-                          src={`${user.avatar}/avatar`}
+                          // DB에 저장된 full URL을 그대로 사용
+                          src={user.avatar!}
                           alt={user.username}
                           width={45}
                           height={45}

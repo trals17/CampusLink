@@ -127,8 +127,10 @@ export default function Live() {
                 </p>
               </div>
               <div className="stream-user flex flex-col items-center ml-4">
+                +{" "}
                 <Image
-                  src={`${stream.user.avatar}/public`}
+                  // DB에 저장된 full URL을 그대로 사용
+                  src={stream.user.avatar!}
                   alt={stream.user.username}
                   width={50}
                   height={50}
