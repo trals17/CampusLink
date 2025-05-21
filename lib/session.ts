@@ -1,14 +1,17 @@
-import { getIronSession } from 'iron-session';
-import { cookies } from 'next/headers';
+import { getIronSession } from "iron-session";
+import { cookies } from "next/headers";
 
-interface SessionContant {
+interface SessionContent {
   id?: number;
-  //? -> 쿠키에 id가 없을 수 도 있음 -> 로그인 한 사용자만 id를 가지고 있기 때문
 }
 
-export default function getSession() {
-  return getIronSession<SessionContant>(cookies(), {
-    cookieName: 'delicious-carrot',
+export default async function getSession() {
+  // 1) 반드시 await cookies()로 CookieStore를 가져옵니다.
+  const cookieStore = await cookies();
+
+  // 2) 그 CookieStore를 getIronSession에 넘겨야 세션을 읽어올 수 있어요.
+  return getIronSession<SessionContent>(cookieStore, {
+    cookieName: "delicious-carrot",
     password: process.env.COOKIE_PASSWORD!,
   });
 }
