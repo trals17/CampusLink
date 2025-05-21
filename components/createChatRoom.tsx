@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { createRoom } from '@/app/products/[id]/actions';
-import { redirect } from 'next/navigation';
+import { createRoom } from "@/app/products/[id]/actions";
+import { redirect } from "next/navigation";
 
 interface IUser {
   username: string;
