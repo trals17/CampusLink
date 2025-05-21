@@ -1,10 +1,11 @@
 "use server";
 
-import twilio from "twilio";
 import crypto from "crypto";
 import { z } from "zod";
 import validator from "validator";
 import { redirect } from "next/navigation";
+import { Vonage } from "@vonage/server-sdk";
+import { Auth as VonageAuth } from "@vonage/auth";
 import db from "@/lib/db";
 import getSession from "@/lib/session";
 
@@ -18,12 +19,8 @@ const phoneSchema = z
 
 async function tokenExists(token: number) {
   const exists = await db.sMSToken.findUnique({
-    where: {
-      token: token.toString(),
-    },
-    select: {
-      id: true,
-    },
+    where: { token: token.toString() },
+    select: { id: true },
   });
   return Boolean(exists);
 }
@@ -34,103 +31,94 @@ const tokenSchema = z.coerce
   .max(999999)
   .refine(tokenExists, "This token does not exist.");
 
-interface ActionState {
-  token: boolean;
-}
-
-10 * 10 * 10 * 10 * 10 * 10;
-
-async function getToken() {
-  const token = crypto.randomInt(100000, 999999).toString();
+async function getToken(): Promise<string> {
+  const t = crypto.randomInt(100000, 999999).toString();
   const exists = await db.sMSToken.findUnique({
-    where: {
-      token,
-    },
-    select: {
-      id: true,
-    },
+    where: { token: t },
+    select: { id: true },
   });
-  if (exists) {
-    return getToken();
-  } else {
-    return token;
-  }
+  return exists ? getToken() : t;
 }
 
-export async function smsLogIn(prevState: ActionState, formData: FormData) {
+export async function smsLogIn(
+  prevState: { token: boolean },
+  formData: FormData
+) {
   const phone = formData.get("phone");
-  const token = formData.get("token");
+  const tokenInput = formData.get("token");
+
+  // 1) 전화번호 입력 → 토큰 생성 후 SMS 발송
   if (!prevState.token) {
     const result = phoneSchema.safeParse(phone);
     if (!result.success) {
-      return {
-        token: false,
-        error: result.error.flatten(),
-      };
-    } else {
-      await db.sMSToken.deleteMany({
-        where: {
-          user: {
-            phone: result.data,
-          },
-        },
-      });
-      const token = await getToken();
-      await db.sMSToken.create({
-        data: {
-          token,
-          user: {
-            connectOrCreate: {
-              where: {
-                phone: result.data,
-              },
-              create: {
-                username: crypto.randomBytes(10).toString("hex"),
-                phone: result.data,
-              },
+      return { token: false, error: result.error.flatten() };
+    }
+    // E.164 포맷으로 변환
+    const phoneNumber = result.data.startsWith("0")
+      ? "+82" + result.data.slice(1)
+      : result.data;
+
+    // 이전 토큰 삭제
+    await db.sMSToken.deleteMany({
+      where: { user: { phone: phoneNumber } },
+    });
+
+    const token = await getToken();
+    // DB에 토큰 저장
+    await db.sMSToken.create({
+      data: {
+        token,
+        user: {
+          connectOrCreate: {
+            where: { phone: phoneNumber },
+            create: {
+              username: crypto.randomBytes(5).toString("hex"),
+              phone: phoneNumber,
             },
           },
         },
-      });
-      const client = twilio(
-        process.env.TWILIO_ACCOUNT_SID,
-        process.env.TWILIO_AUTH_TOKEN
-      );
-      await client.messages.create({
-        body: `Your Karrot verification code is: ${token}`,
-        from: process.env.TWILIO_PHONE_NUMBER!,
-        to: process.env.MY_PHONE_NUMBER!,
-      });
-      return {
-        token: true,
-      };
-    }
-  } else {
-    const result = await tokenSchema.spa(token);
-    if (!result.success) {
-      return {
-        token: true,
-        error: result.error.flatten(),
-      };
-    } else {
-      const token = await db.sMSToken.findUnique({
-        where: {
-          token: result.data.toString(),
-        },
-        select: {
-          id: true,
-          userId: true,
-        },
-      });
-      const session = await getSession();
-      session.id = token!.userId;
-      await session.save();
-      await db.sMSToken.delete({
-        where: {
-          id: token!.id,
-        },
-      });
-      redirect("/profile");
-    }
+      },
+    });
+
+    // Vonage 인증 객체 + 클라이언트 생성
+    const credentials = new VonageAuth({
+      apiKey: process.env.VONAGE_API_KEY as string,
+      apiSecret: process.env.VONAGE_API_SECRET as string,
+    });
+    const vonage = new Vonage(credentials);
+
+    // SMS 전송
+    await vonage.sms.send({
+      to: phoneNumber,
+      from: process.env.VONAGE_SMS_FROM as string,
+      text: `Your verification code is: ${token}`,
+    });
+
+    return { token: true };
   }
+
+  // 2) 토큰 검증 단계
+  const result = await tokenSchema.safeParseAsync(tokenInput);
+  if (!result.success) {
+    return { token: true, error: result.error.flatten() };
+  }
+
+  const record = await db.sMSToken.findUnique({
+    where: { token: result.data.toString() },
+    select: { id: true, userId: true },
+  });
+  if (!record) {
+    return { token: true, error: { formErrors: ["Invalid token"] } };
+  }
+
+  // 로그인 세션 설정
+  const session = await getSession();
+  session.id = record.userId;
+  await session.save();
+
+  // 사용된 토큰 삭제
+  await db.sMSToken.delete({ where: { id: record.id } });
+
+  // 완료 후 리다이렉트
+  return redirect("/profile");
 }
