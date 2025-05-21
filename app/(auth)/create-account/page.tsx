@@ -146,7 +146,7 @@ export default function CreateAccount() {
           errors={state?.fieldErrors.comfirmPassword}
           minLength={PASSWORD_MIN_LENGTH}
         />
-        <Button text="Create account" />
+        <Button type="submit" text="Create account" />
       </form>
       <SocialLogin />
     </div>
