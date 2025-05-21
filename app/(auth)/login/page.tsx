@@ -3,7 +3,6 @@
 import Button from "@/components/button";
 import Input from "@/components/input";
 import SocialLogin from "@/components/social-login";
-import { redirect } from "next/navigation";
 import { useFormState } from "react-dom";
 import { login } from "./action";
 import { PASSWORD_MIN_LENGTH } from "@/lib/constants";
@@ -17,7 +16,7 @@ export default function Login() {
         <h1 className="text-2xl">안녕하세요!</h1>
         <h2 className="text-xl">학우들과 거래할 수 있어요</h2>
       </div>
-      <form action={dispatch} className="flex flex-col gap-3">
+      <form action={dispatch} method="post" className="flex flex-col gap-3">
         <Input
           name="email"
           type="email"
@@ -34,7 +33,7 @@ export default function Login() {
           errors={state?.fieldErrors.password}
         />
 
-        <Button text="Create account" />
+        <Button type="submit" text="로그인" />
       </form>
       <SocialLogin />
     </div>

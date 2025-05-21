@@ -10,7 +10,7 @@ import Input from "./input";
 import Link from "next/link";
 import BeforePage from "./BeforePage";
 
-interface User {
+interface EditProfileProps {
   user: {
     id: number;
     username: string;
@@ -18,59 +18,53 @@ interface User {
   };
 }
 
-export default function EditProfile({ user }: User) {
+export default function EditProfile({ user }: EditProfileProps) {
   const [preview, setPreview] = useState<string | null>(null);
   const [uploadUrl, setUploadUrl] = useState("");
-  const [profilePhotoId, setProfilePhotoId] = useState("");
 
   const onImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
       target: { files },
     } = e;
-    if (!files) {
-      return;
-    }
-
+    if (!files) return;
     const file = files[0];
-
     if (!file.type.startsWith("image/")) {
       return alert("이미지 파일만 업로드가 가능합니다");
     }
-
-    const fileSizeInMb = file.size / (1024 * 1024);
-
-    if (fileSizeInMb > 2) {
+    if (file.size / (1024 * 1024) > 2) {
       return alert("2MB를 초과하는 이미지는 업로드 할 수 없습니다.");
     }
-
     const url = URL.createObjectURL(file);
     setPreview(url);
-
     const { result, success } = await getUploadUrl();
     if (success) {
-      const { id, uploadURL } = result;
-      setUploadUrl(uploadURL);
-      setProfilePhotoId(id);
+      setUploadUrl(result.uploadURL);
     }
   };
 
   const interceptAction = async (prevState: any, formData: FormData) => {
     const file = formData.get("avatar");
     if (file instanceof File) {
+      // 1) Cloudflare에 파일 POST
       const cloudflareForm = new FormData();
       cloudflareForm.append("file", file);
       const response = await fetch(uploadUrl, {
-        method: "post",
+        method: "POST",
         body: cloudflareForm,
       });
-      if (response.status !== 200) {
-        return;
+      if (!response.ok) return;
+      // 2) JSON 한 번만 파싱
+      const data = await response.json();
+      // 3) 실제 이미지 URL 추출
+      const imageId = data.result?.id;
+      const publicUrl =
+        data.result?.variants?.[0] ||
+        `https://imagedelivery.net/${process.env.NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_HASH}/${imageId}/public`;
+      if (imageId) {
+        formData.set("avatar", publicUrl);
+        setPreview(publicUrl);
       }
-
-      const photoUrl = `https://imagedelivery.net/5d0LqFK4H5JncIwtTJ4IZg/${profilePhotoId}`;
-      formData.set("avatar", photoUrl);
     }
-
     return EditProfileAction(prevState, formData);
   };
 
@@ -78,13 +72,12 @@ export default function EditProfile({ user }: User) {
 
   return (
     <div className="p-5 flex flex-col gap-5">
-      <form action={action}>
+      <form action={action} method="post" encType="multipart/form-data">
         <div className="flex justify-between items-center">
           <BeforePage />
           <h3 className="text-2xl font-semibold">프로필 수정</h3>
-          <button>완료</button>
+          <button type="submit">완료</button>
         </div>
-
         <div className="flex justify-center items-center mt-10">
           <label className="cursor-pointer" htmlFor="avatar-input">
             {preview ? (
@@ -99,7 +92,7 @@ export default function EditProfile({ user }: User) {
               />
             ) : (
               <Image
-                src={`${user.avatar}/public`}
+                src={user.avatar!}
                 alt={user.username}
                 width={80}
                 height={80}
@@ -107,7 +100,6 @@ export default function EditProfile({ user }: User) {
               />
             )}
           </label>
-
           <input
             onChange={onImageChange}
             type="file"
@@ -117,7 +109,6 @@ export default function EditProfile({ user }: User) {
             className="hidden"
           />
         </div>
-
         <div className="flex flex-col gap-3">
           <input type="hidden" name="id" value={user.id} />
           <h3 className="mt-4">닉네임</h3>
