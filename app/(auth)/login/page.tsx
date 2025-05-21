@@ -33,7 +33,7 @@ export default function Login() {
           errors={state?.fieldErrors.password}
         />
 
-        <Button type="submit" text="로그인" />
+        <Button type="submit" text="Login" />
       </form>
       <SocialLogin />
     </div>
