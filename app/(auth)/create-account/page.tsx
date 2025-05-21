@@ -70,10 +70,10 @@ export default function CreateAccount() {
   return (
     <div className="flex flex-col gap-10 py-8 px-6">
       <div className="flex flex-col gap-2 *:font-medium">
-        <h1 className="text-2xl">안녕하세요!</h1>
+        <h1 className="text-2xl">안녕하세요 !</h1>
         <h2 className="text-xl">
-          <strong className="text-lg font-bold text-yellow-600">와우</strong>와
-          함께 할 준비가 되셨나요 ?
+          <strong className="text-lg font-bold text-yellow-600"></strong>
+          캠퍼스 커뮤니티에 오신 것을 환영합니다 !
         </h2>
       </div>
       <form action={dispatch} className="flex flex-col gap-3 ">

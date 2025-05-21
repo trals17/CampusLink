@@ -1,17 +1,17 @@
-'use server';
+"use server";
 import {
   PASSWORD_MIN_LENGTH,
   PASSWORD_REGEX,
   PASSWORD_REGEX_ERROR,
-} from '@/lib/constants';
-import db from '@/lib/db';
-import { z } from 'zod';
-import bcrypt from 'bcrypt';
-import { redirect } from 'next/navigation';
-import getSession from '@/lib/session';
+} from "@/lib/constants";
+import db from "@/lib/db";
+import { z } from "zod";
+import bcrypt from "bcrypt";
+import { redirect } from "next/navigation";
+import getSession from "@/lib/session";
 
 const checkUsername = (username: string) => {
-  return username.includes('potato') ? false : true;
+  return username.includes("potato") ? false : true;
 };
 
 const checkPassword = ({
@@ -26,24 +26,24 @@ const formSchema = z
   .object({
     username: z
       .string({
-        invalid_type_error: 'Username must be a string! ',
-        required_error: 'Where is my username?',
+        invalid_type_error: "Username must be a string! ",
+        required_error: "Where is my username?",
       })
       .trim()
       .toLowerCase()
 
-      .refine((username) => checkUsername(username), 'No potato allowed'),
+      .refine((username) => checkUsername(username), "No potato allowed"),
     avatar: z.string(),
     email: z
       .string({
-        invalid_type_error: 'Email must be a string!',
-        required_error: 'Where is my email',
+        invalid_type_error: "Email must be a string!",
+        required_error: "Where is my email",
       })
       .email()
       .toLowerCase(),
-    password: z.string().min(PASSWORD_MIN_LENGTH, 'Way too short!'),
+    password: z.string().min(PASSWORD_MIN_LENGTH, "Way too short!"),
     // .regex(PASSWORD_REGEX, PASSWORD_REGEX_ERROR),
-    comfirmPassword: z.string().min(PASSWORD_MIN_LENGTH, 'Way too short!'),
+    comfirmPassword: z.string().min(PASSWORD_MIN_LENGTH, "Way too short!"),
   })
   .superRefine(async ({ username }, ctx) => {
     const user = await db.user.findUnique({
@@ -56,9 +56,9 @@ const formSchema = z
     });
     if (user) {
       ctx.addIssue({
-        code: 'custom',
-        message: 'This username is already taken',
-        path: ['username'],
+        code: "custom",
+        message: "This username is already taken",
+        path: ["username"],
         fatal: true,
       });
       return z.NEVER;
@@ -75,26 +75,26 @@ const formSchema = z
     });
     if (user) {
       ctx.addIssue({
-        code: 'custom',
-        message: 'This email is already taken',
-        path: ['email'],
+        code: "custom",
+        message: "This email is already taken",
+        path: ["email"],
         fatal: true,
       });
       return z.NEVER;
     }
   })
   .refine(checkPassword, {
-    message: 'Both passwords should be the same!',
-    path: ['comfirmPassword'],
+    message: "Both passwords should be the same!",
+    path: ["comfirmPassword"],
   });
 
 export async function createAccountAction(prevState: any, formData: FormData) {
   const data = {
-    avatar: formData.get('avatar'),
-    username: formData.get('username'),
-    email: formData.get('email'),
-    password: formData.get('password'),
-    comfirmPassword: formData.get('comfirmPassword'),
+    avatar: formData.get("avatar"),
+    username: formData.get("username"),
+    email: formData.get("email"),
+    password: formData.get("password"),
+    comfirmPassword: formData.get("comfirmPassword"),
   };
 
   const result = await formSchema.safeParseAsync(data);
@@ -120,6 +120,6 @@ export async function createAccountAction(prevState: any, formData: FormData) {
     await session.save();
 
     // 리디렉션
-    redirect('/profile');
+    redirect("/profile");
   }
 }

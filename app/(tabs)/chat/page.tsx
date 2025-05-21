@@ -19,7 +19,7 @@ export default async function Chat() {
           height={45}
         />
         <div className="text-center text-3xl font-semibold border-orange-600 flex flex-col">
-          <strong className="text-yellow-600">의뢰를를</strong>
+          <strong className="text-yellow-600">의뢰를</strong>
           <h1> 하세요</h1>
         </div>
         <Image
