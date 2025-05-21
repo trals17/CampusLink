@@ -32,7 +32,7 @@ export default function LeaveForm({ user, id }: ILeaveFormProps) {
               복구할 수 없습니다.
             </li>
             <li>현재 계정으로 다시 로그인할 수 없습니다.</li>
-            <li>무엇보다 학우들을 만날 수 없습니다.</li>
+            <li>무엇보다 학우들과 거래할 수 없습니다.</li>
           </ul>
         </div>
         <div className="flex flex-col gap-4 pt-8">
