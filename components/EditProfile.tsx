@@ -4,10 +4,9 @@ import EditProfileAction from "@/app/(tabs)/profile/edit/[id]/actions";
 import { getUploadUrl } from "@/app/products/add/actions";
 import Image from "next/image";
 import { useState } from "react";
-import { useFormState } from "react-dom";
-import { XMarkIcon } from "@heroicons/react/24/solid";
+// ⚠️ 여기서 experimental_useFormState로 가져와야 합니다
+import { experimental_useFormState as useFormState } from "react-dom";
 import Input from "./input";
-import Link from "next/link";
 import BeforePage from "./BeforePage";
 
 interface EditProfileProps {
@@ -32,8 +31,7 @@ export default function EditProfile({ user }: EditProfileProps) {
       return alert("2MB를 초과하는 이미지는 업로드 할 수 없습니다.");
     }
     // 미리보기
-    const url = URL.createObjectURL(file);
-    setPreview(url);
+    setPreview(URL.createObjectURL(file));
     // 업로드 URL 받아오기
     const { result, success } = await getUploadUrl();
     if (success) {
@@ -41,31 +39,27 @@ export default function EditProfile({ user }: EditProfileProps) {
     }
   };
 
-  const interceptAction = async (_prevState: any, formData: FormData) => {
+  const interceptAction = async (_prev: any, formData: FormData) => {
     const file = formData.get("avatar");
-    if (file instanceof File) {
-      // 1) Cloudflare에 파일 POST
+    if (file instanceof File && uploadUrl) {
+      // Cloudflare에 파일 POST
       const cfForm = new FormData();
       cfForm.append("file", file);
-      const res = await fetch(uploadUrl, {
-        method: "POST",
-        body: cfForm,
-      });
+      const res = await fetch(uploadUrl, { method: "POST", body: cfForm });
       if (!res.ok) throw new Error("이미지 업로드 실패");
       const data = await res.json();
       const imageId = data.result?.id;
       const publicUrl =
         data.result?.variants?.[0] ||
         `https://imagedelivery.net/${process.env.NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_HASH}/${imageId}/public`;
-      // formData 갱신
       formData.set("avatar", publicUrl);
       setPreview(publicUrl);
     } else {
-      // 변경된 이미지 없으면 기존 URL 그대로
+      // 변경 없을 때 기존 avatar 유지
       formData.set("avatar", user.avatar || "");
     }
 
-    // 서버 액션 호출 (FormData만 넘깁니다)
+    // 서버 액션 호출
     return EditProfileAction(formData);
   };
 
@@ -74,7 +68,6 @@ export default function EditProfile({ user }: EditProfileProps) {
   return (
     <div className="p-5 flex flex-col gap-5">
       <form action={action} method="post" encType="multipart/form-data">
-        {/* 헤더 */}
         <div className="flex justify-between items-center">
           <BeforePage />
           <h3 className="text-2xl font-semibold">프로필 수정</h3>
@@ -86,7 +79,6 @@ export default function EditProfile({ user }: EditProfileProps) {
           </button>
         </div>
 
-        {/* 아바타 업로드 & 미리보기 */}
         <div className="flex justify-center items-center mt-10">
           <label className="cursor-pointer" htmlFor="avatar-input">
             {preview ? (
@@ -119,10 +111,8 @@ export default function EditProfile({ user }: EditProfileProps) {
           />
         </div>
 
-        {/* 숨겨진 ID 필드 */}
         <input type="hidden" name="id" value={user.id} />
 
-        {/* 닉네임 입력 */}
         <div className="flex flex-col gap-3 mt-6">
           <label htmlFor="username" className="font-medium">
             닉네임
