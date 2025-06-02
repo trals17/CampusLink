@@ -6,8 +6,8 @@ export default function Loading() {
       <Image
         src="/cow_beanie_crossbow.png"
         alt="cow_beanie_crossbow"
-        width={300}
-        height={300}
+        width={200}
+        height={200}
         className="animate-bounce"
       />
       <h1
