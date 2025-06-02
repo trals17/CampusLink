@@ -18,9 +18,8 @@ export default async function Chat() {
           width={45}
           height={45}
         />
-        <div className="text-center text-3xl font-semibold border-orange-600 flex flex-col">
+        <div className="text-center text-3xl font-medium border-orange-600 flex flex-col">
           <strong className="text-yellow-600">채팅</strong>
-          <h1> 하기</h1>
         </div>
         <Image
           src={"/cow_beanie_crossbow.png"}
