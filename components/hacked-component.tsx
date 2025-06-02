@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { any } from 'zod';
+import { any } from "zod";
 
 export default function HackedComponent({}: any) {
   return (
     <>
-      <h1>해커들</h1>
+      <h1>해커</h1>
     </>
   );
 }

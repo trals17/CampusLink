@@ -4,7 +4,6 @@ import EditProfileAction from "@/app/(tabs)/profile/edit/[id]/actions";
 import { getUploadUrl } from "@/app/products/add/actions";
 import Image from "next/image";
 import { useState } from "react";
-// ⚠️ 여기서 experimental_useFormState로 가져와야 합니다
 import { useFormState } from "react-dom";
 import Input from "./input";
 import BeforePage from "./BeforePage";
