@@ -13,7 +13,7 @@ export default function AddStream() {
       <div className="pt-5">
         <BeforePage />
         <h1 className="text-2xl text-center py-3 mt-5 mx-2 text-white-700 font-semibold shadow-lg ">
-          <strong className="text-red-700">라이브</strong>를 하세요.
+          <strong className="text-red-700">라이브</strong>//
         </h1>
 
         <form

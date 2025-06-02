@@ -53,7 +53,7 @@ export default async function Life() {
             width={60}
             height={60}
           />
-          <strong className="text-yellow-600">와우</strong>의 이야기
+          <strong className="text-yellow-600">커뮤니티</strong>//
         </h1>
       </div>
       {posts.map((post) => (
