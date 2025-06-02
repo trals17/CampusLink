@@ -18,7 +18,7 @@ export default async function Chat() {
           width={45}
           height={45}
         />
-        <div className="text-center text-3xl font-medium border-orange-600 flex flex-col">
+        <div className="text-center text-3xl font-normal border-orange-600 flex flex-col">
           <strong className="text-yellow-600">채팅</strong>
         </div>
         <Image
