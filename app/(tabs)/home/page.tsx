@@ -1,24 +1,24 @@
-import ProductList from '@/components/product-list';
-import db from '@/lib/db';
-import { PlusIcon } from '@heroicons/react/24/solid';
-import { Prisma } from '@prisma/client';
+import ProductList from "@/components/product-list";
+import db from "@/lib/db";
+import { PlusIcon } from "@heroicons/react/24/solid";
+import { Prisma } from "@prisma/client";
 import {
   unstable_cache as nextCache,
   revalidatePath,
   revalidateTag,
-} from 'next/cache';
-import Link from 'next/link';
+} from "next/cache";
+import Link from "next/link";
 
-const getCachedProducts = nextCache(getInitialProducts, ['home-products'], {
-  tags: ['products-page'],
+const getCachedProducts = nextCache(getInitialProducts, ["home-products"], {
+  tags: ["products-page"],
 });
 
 export const metadata = {
-  title: 'Home',
+  title: "Home",
 };
 
 async function getInitialProducts() {
-  console.log('hit');
+  console.log("hit");
   const products = await db.product.findMany({
     select: {
       title: true,
@@ -29,7 +29,7 @@ async function getInitialProducts() {
       status: true,
     },
     orderBy: {
-      created_at: 'desc',
+      created_at: "desc",
     },
   });
   return products;
