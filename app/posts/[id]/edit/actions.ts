@@ -3,7 +3,7 @@
 
 import db from "@/lib/db";
 import { redirect } from "next/navigation";
-import { revalidateTag } from "next/cache";
+import { revalidateTag } from "next/cache"; // 그대로 두세요
 import z from "zod";
 
 const formSchema = z.object({
@@ -42,8 +42,9 @@ export default async function EditPostAction(formData: FormData) {
     },
   });
 
-  // 4) 캐시 무효화: 상세 페이지에서 nextCache에 사용한 태그 이름과 동일해야 합니다.
+  // 4) 캐시 무효화: 상세 페이지 태그와 리스트 페이지 태그를 모두 갱신합니다.
   revalidateTag("post-detail");
+  revalidateTag("posts-list"); // ← 이 줄을 추가하세요
 
   // 5) 수정 완료 후 상세 페이지로 리다이렉트
   redirect(`/posts/${id}`);

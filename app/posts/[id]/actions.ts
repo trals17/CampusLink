@@ -1,9 +1,9 @@
-'use server';
+"use server";
 
-import db from '@/lib/db';
-import getSession from '@/lib/session';
-import { revalidateTag } from 'next/cache';
-import z from 'zod';
+import db from "@/lib/db";
+import getSession from "@/lib/session";
+import { revalidateTag } from "next/cache";
+import z from "zod";
 
 export async function likePost(postId: number) {
   await new Promise((r) => setTimeout(r, 10000));
@@ -38,7 +38,7 @@ export async function dislikePost(postId: number) {
 //comments 저장하기
 
 const formSchema = z.object({
-  payload: z.string().trim().min(1, '댓글 내용을 입력해주세요.'),
+  payload: z.string().trim().min(1, "댓글 내용을 입력해주세요."),
   userId: z.number(),
   postId: z.number(),
 });
@@ -48,9 +48,9 @@ export default async function CommentAction(
   formData: FormData
 ) {
   const data = {
-    payload: formData.get('payload'),
-    userId: Number(formData.get('userId')),
-    postId: Number(formData.get('postId')),
+    payload: formData.get("payload"),
+    userId: Number(formData.get("userId")),
+    postId: Number(formData.get("postId")),
   };
 
   const result = formSchema.safeParse(data);
@@ -68,7 +68,7 @@ export default async function CommentAction(
       },
     });
 
-    revalidateTag('posts-list');
+    revalidateTag("posts-list");
     return { data: newComment };
   }
 }
