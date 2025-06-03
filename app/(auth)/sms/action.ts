@@ -120,5 +120,5 @@ export async function smsLogIn(
   await db.sMSToken.delete({ where: { id: record.id } });
 
   // 완료 후 리다이렉트
-  return redirect("/products");
+  return redirect("/home");
 }
